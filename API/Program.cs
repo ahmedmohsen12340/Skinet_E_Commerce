@@ -1,9 +1,12 @@
+using Core;
+using InfraStructure;
+using InfraStructure.Data.SeedData;
 using InfraStucture.Data;
 using Microsoft.EntityFrameworkCore;
 
 internal class Program
 {
-    private static void Main(string[] args)
+    private static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +20,7 @@ internal class Program
         {
             option.UseSqlite(builder.Configuration.GetConnectionString("Default"));
         });
+        builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
         var app = builder.Build();
 
@@ -33,6 +37,19 @@ internal class Program
 
         app.MapControllers();
 
+        using var scope = app.Services.CreateScope();
+        var services = scope.ServiceProvider;
+        var context = services.GetRequiredService<StoreDbContext>();
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        try
+        {
+            await context.Database.MigrateAsync();
+            await StoreContextSeed.SeedData(context);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "An error occurred while migrating or seeding the database.");
+        }
         app.Run();
     }
 }
