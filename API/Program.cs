@@ -1,8 +1,13 @@
+using API.Errors;
+using API.Extensions;
+using API.Middlewares;
 using Core;
 using InfraStructure;
 using InfraStructure.Data.SeedData;
 using InfraStucture.Data;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography.Xml;
 
 internal class Program
 {
@@ -10,19 +15,13 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
-
-        builder.Services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
-        builder.Services.AddDbContext<StoreDbContext>((option) =>
-        {
-            option.UseSqlite(builder.Configuration.GetConnectionString("Default"));
-        });
-        builder.Services.AddScoped<IProductRepository, ProductRepository>();
+        builder.Services.AddServices(builder.Configuration);
 
         var app = builder.Build();
+
+        app.UseExceptionMiddleware();
+
+        app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())

@@ -7,14 +7,20 @@ using Core;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[Controller]")]
-    public class ProductsController : ControllerBase
+
+    public class ProductsController : BaseApiController
     {
         private readonly IProductRepository _productRepository;
-        public ProductsController(IProductRepository productRepository)
+        private readonly IGenericRepo<Product> _productRepo;
+
+        private readonly IGenericRepo<ProductBrand> _productBrandRepo;
+
+        public ProductsController(IProductRepository productRepository,IGenericRepo<Product> productRepo,IGenericRepo<ProductBrand> productBrandRepo)
         {
+            _productBrandRepo = productBrandRepo;
             _productRepository = productRepository;
+            _productRepo = productRepo;
+
         }
 
         [HttpGet]
@@ -30,14 +36,14 @@ namespace API.Controllers
             return await _productRepository.GetProductByIdAsync(id);
         }
         [HttpGet("brands")]
-        public async Task<ActionResult<List<Product>>> GetProductBrands()
+        public async Task<ActionResult<List<ProductBrand>>> GetProductBrands()
         {
             var brands = await _productRepository.GetProductBrandsAsync();
             return Ok(brands);
             // return "no Prolem";
         }
         [HttpGet("types")]
-        public async Task<ActionResult<List<Product>>> GetProductTypes()
+        public async Task<ActionResult<List<ProductType>>> GetProductTypes()
         {
             var Types = await _productRepository.GetProductTypesAsync();
             return Ok(Types);

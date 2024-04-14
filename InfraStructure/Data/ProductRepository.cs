@@ -15,12 +15,17 @@ public class ProductRepository : IProductRepository
 
     public async Task<Product> GetProductByIdAsync(int id)
     {
-        return await _dbContext.Products.Include(p=>p.ProductBrand).Include(p=>p.ProductType).Where(p=>p.Id==id).FirstOrDefaultAsync();
+        return await _dbContext.Products
+        .Include(p => p.ProductBrand)
+        .Include(p => p.ProductType)
+        .Where(p => p.Id == id).FirstOrDefaultAsync();
     }
 
     public async Task<IReadOnlyList<Product>> GetProductsAsync()
     {
-        return await _dbContext.Products.Include(p=>p.ProductBrand).Include(p=>p.ProductType).ToListAsync();
+        return await _dbContext.Products
+        .Include(p => p.ProductBrand)
+        .Include(p => p.ProductType).ToListAsync();
     }
 
     public async Task<IReadOnlyList<ProductType>> GetProductTypesAsync()
