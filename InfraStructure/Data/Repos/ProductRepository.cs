@@ -3,7 +3,7 @@ using Core.Entities;
 using InfraStucture.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace InfraStructure;
+namespace InfraStructure.Repos;
 
 public class ProductRepository : IProductRepository
 {

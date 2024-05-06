@@ -4,51 +4,58 @@ using Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Core;
+using Microsoft.AspNetCore.Routing.Constraints;
+using Core.Specifications;
+using Core.Interfaces;
+using AutoMapper;
+using API.DTOs;
 
 namespace API.Controllers
 {
 
     public class ProductsController : BaseApiController
     {
-        private readonly IProductRepository _productRepository;
-        private readonly IGenericRepo<Product> _productRepo;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        private readonly IGenericRepo<ProductBrand> _productBrandRepo;
-
-        public ProductsController(IProductRepository productRepository,IGenericRepo<Product> productRepo,IGenericRepo<ProductBrand> productBrandRepo)
+        public ProductsController(IUnitOfWork unitOfWork,IMapper mapper)
         {
-            _productBrandRepo = productBrandRepo;
-            _productRepository = productRepository;
-            _productRepo = productRepo;
-
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Product>>> GetProducts()
         {
-            var products = await _productRepository.GetProductsAsync();
-            return Ok(products);
-            // return "no Prolem";
+            var productsWithBrandsAndTypes = new BaseSpecifications<Product>();
+            productsWithBrandsAndTypes.AddInclude(p => p.ProductBrand);
+            productsWithBrandsAndTypes.AddInclude(p => p.ProductType);
+            var products = await _unitOfWork.Products.ListAllAsync(productsWithBrandsAndTypes);
+            var poductsDTO = _mapper.Map<IEnumerable<Product>,IEnumerable<ProductDTO>>(products);
+            return Ok(poductsDTO);
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        public async Task<ActionResult<ProductDTO>> GetProduct(int id)
         {
-            return await _productRepository.GetProductByIdAsync(id);
+            var productsWithBrandsAndTypes = new BaseSpecifications<Product>(p => p.Id == id);
+            productsWithBrandsAndTypes.AddInclude(p => p.ProductBrand);
+            productsWithBrandsAndTypes.AddInclude(p => p.ProductType);
+            var product = await _unitOfWork.Products.GetEntityWithSpec(productsWithBrandsAndTypes);
+            return _mapper.Map<Product,ProductDTO>(product);
         }
         [HttpGet("brands")]
         public async Task<ActionResult<List<ProductBrand>>> GetProductBrands()
         {
-            var brands = await _productRepository.GetProductBrandsAsync();
-            return Ok(brands);
-            // return "no Prolem";
+            var spec = new BaseSpecifications<ProductBrand>();
+            var productBrands = await _unitOfWork.ProductBrands.ListAllAsync(spec);
+            return Ok(productBrands);
         }
         [HttpGet("types")]
         public async Task<ActionResult<List<ProductType>>> GetProductTypes()
         {
-            var Types = await _productRepository.GetProductTypesAsync();
-            return Ok(Types);
-            // return "no Prolem";
+            var spec = new BaseSpecifications<ProductType>();
+            var productTypes = await _unitOfWork.ProductTypes.ListAllAsync(spec);
+            return Ok(productTypes);
         }
-
     }
 }

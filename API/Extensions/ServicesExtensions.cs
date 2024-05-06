@@ -1,6 +1,8 @@
 ﻿using API.Errors;
 using Core;
+using Core.Interfaces;
 using InfraStructure;
+using InfraStructure.Data.Repos;
 using InfraStucture.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +11,7 @@ namespace API.Extensions
 {
     public static class ServicesExtensions
     {
-        public static IServiceCollection AddServices(this IServiceCollection services,IConfiguration configuration)
+        public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
             // Add services to the container.
 
@@ -21,9 +23,10 @@ namespace API.Extensions
             {
                 option.UseSqlite(configuration.GetConnectionString("Default"));
             });
-            services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
-
+            // services.AddScoped<IProductRepository, ProductRepository>();
+            // services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = actionContext =>
