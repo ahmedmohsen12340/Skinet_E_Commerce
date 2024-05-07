@@ -33,6 +33,8 @@ internal class Program
         // app.UseHttpsRedirection();
         app.UseStaticFiles();
 
+        app.UseCors("myPolicy");
+
         app.UseAuthorization();
 
         app.MapControllers();

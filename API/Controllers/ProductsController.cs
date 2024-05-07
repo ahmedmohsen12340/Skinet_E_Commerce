@@ -9,6 +9,7 @@ using Core.Specifications;
 using Core.Interfaces;
 using AutoMapper;
 using API.DTOs;
+using API.Helpers;
 
 namespace API.Controllers
 {
@@ -18,30 +19,28 @@ namespace API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public ProductsController(IUnitOfWork unitOfWork,IMapper mapper)
+        public ProductsController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetProducts()
+        public async Task<ActionResult<List<Product>>> GetProducts([FromQuery] ProductsSpecParams productsParams)
         {
-            var productsWithBrandsAndTypes = new BaseSpecifications<Product>();
-            productsWithBrandsAndTypes.AddInclude(p => p.ProductBrand);
-            productsWithBrandsAndTypes.AddInclude(p => p.ProductType);
+            var productsWithBrandsAndTypes = new ProductsWithBrandsAndTypes(productsParams);
             var products = await _unitOfWork.Products.ListAllAsync(productsWithBrandsAndTypes);
-            var poductsDTO = _mapper.Map<IEnumerable<Product>,IEnumerable<ProductDTO>>(products);
-            return Ok(poductsDTO);
+            var count = _unitOfWork.Products.GetCount();
+            var poductsDTO = _mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(products);
+            var result = new Pagination<ProductDTO>(productsParams.PageIndex.Value,productsParams.PageSize.Value,count,poductsDTO);
+            return Ok(result);
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductDTO>> GetProduct(int id)
         {
-            var productsWithBrandsAndTypes = new BaseSpecifications<Product>(p => p.Id == id);
-            productsWithBrandsAndTypes.AddInclude(p => p.ProductBrand);
-            productsWithBrandsAndTypes.AddInclude(p => p.ProductType);
-            var product = await _unitOfWork.Products.GetEntityWithSpec(productsWithBrandsAndTypes);
-            return _mapper.Map<Product,ProductDTO>(product);
+            var productWithBrandsAndTypes = new ProductsWithBrandsAndTypes(id);
+            var product = await _unitOfWork.Products.GetEntityWithSpec(productWithBrandsAndTypes);
+            return _mapper.Map<Product, ProductDTO>(product);
         }
         [HttpGet("brands")]
         public async Task<ActionResult<List<ProductBrand>>> GetProductBrands()

@@ -42,7 +42,11 @@ namespace API.Extensions
                 };
             });
 
-
+            services.AddCors(opt=>{
+                opt.AddPolicy("myPolicy",policy=>{
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins(configuration["ClientUrl"]);
+                });
+            });
             return services;
         }
     }

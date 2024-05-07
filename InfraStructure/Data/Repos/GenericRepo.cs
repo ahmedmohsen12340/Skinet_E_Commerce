@@ -4,6 +4,7 @@ using Core.Specifications;
 using InfraStructure.Data;
 using InfraStucture.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 
 namespace InfraStructure.Repos;
 
@@ -28,6 +29,10 @@ public class GenericRepo<T> : IGenericRepo<T> where T : BaseEntity
     private IQueryable<T> ApplySpecification(ISpecification<T> spec)
     {
         return SpecificationEvaluator<T>.GetQuery(_DbContext.Set<T>().AsQueryable(), spec);
+    }
+
+    public int GetCount(){
+        return SpecificationEvaluator<T>.Count;
     }
 
     // public async Task<T> GetByIdAsync(int id)
