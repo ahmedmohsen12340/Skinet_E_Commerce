@@ -11,7 +11,7 @@ namespace Core.Specifications
     public class ProductsWithBrandsAndTypes : BaseSpecifications<Product>
     {
         public ProductsWithBrandsAndTypes(ProductsSpecParams productsParams)
-        : base(p => 
+        : base(p =>
         (string.IsNullOrEmpty(productsParams.Search) || p.Name.ToLower().Contains(productsParams.Search)) &&
         (!productsParams.BrandId.HasValue || p.ProductBrandId == productsParams.BrandId) &&
         (!productsParams.TypeId.HasValue || p.ProductTypeId == productsParams.TypeId)
@@ -34,6 +34,11 @@ namespace Core.Specifications
                     OrderBy = p => p.Price;
                     OrderByType = Order.Desc;
                     break;
+                case "name":
+                    OrderBy = p => p.Name;
+                    OrderByType = Order.Asc;
+                    break;
+
                 default:
                     OrderBy = p => p.Name;
                     break;

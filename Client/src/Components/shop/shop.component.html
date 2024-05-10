@@ -1,0 +1,70 @@
+<div class="row">
+  <!-- start filters section -->
+  <section class="col-3">
+    <h3>Sort</h3>
+    <select class="form-select" (change)="onSortSelect($event)">
+      <option value="name">Alphabetical order</option>
+      <option value="priceAsc">Price: from low to high</option>
+      <option value="priceDesc">Price: from high to low</option>
+    </select>
+    <h3>Brands</h3>
+    <div class="my-3">
+      <ul class="list-group">
+        <li class="list-group-item" (click)="onBrandSelect(brand.id)"
+          [ngClass]="{'active': brand.id===productParams.BrandId}" *ngFor="let brand of brands">
+          {{brand.name}}
+        </li>
+      </ul>
+    </div>
+    <h3>Types</h3>
+    <div class="my-3">
+      <ul class="list-group">
+        <li class="list-group-item" (click)="onTypeSelect(type.id)"
+          [ngClass]="{'active': type.id===productParams.TypeId}" *ngFor="let type of types">
+          {{type.name}}
+        </li>
+      </ul>
+    </div>
+  </section>
+  <!-- end filters section -->
+
+
+
+  <!-- start products section  -->
+  <section class="col-9">
+    <div class="d-flex justify-content-between">
+      @if (countOFproducts)
+      {
+      <app-pagination-header [pageIndex]="productParams.PageIndex" [pageSize]="productParams.PageSize"
+        [count]="countOFproducts"></app-pagination-header>
+      }
+      @else
+      {
+      <header>There are no result for this filter</header>
+      }
+      <div class="w-50 d-flex">
+        <input type="text" class="form-control mx-1" placeholder="Search" #search>
+        <button class="btn btn-outline-primary mx-1" (click)="onSearch(search.value)">Search</button>
+        <button class="btn btn-outline-secondary mx-1" (click)="onReset()">Reset</button>
+      </div>
+    </div>
+    <div class="my-3">
+      <div class="row">
+        <div *ngFor="let product of products" class="col-4">
+          <app-product-card [product]="product"></app-product-card>
+        </div>
+      </div>
+    </div>
+    <!-- start Pagination  -->
+    @if (countOFproducts)
+    {
+    <div class="d-flex justify-content-center">
+      <ngb-pagination [(page)]="productParams.PageIndex" [pageSize]="productParams.PageSize"
+        [collectionSize]="countOFproducts" [boundaryLinks]="true" (pageChange)="onPageChange($event)"></ngb-pagination>
+    </div>
+    }
+    <!-- end Pagination  -->
+  </section>
+  <!-- end products section  -->
+
+</div>

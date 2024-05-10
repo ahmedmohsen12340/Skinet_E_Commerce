@@ -31,7 +31,7 @@ namespace InfraStructure.Data
                 }
             }
             Count = query.Count();
-            if (spec.IsPagingEnabled)
+            if (spec.IsPagingEnabled && spec.PageIndex.HasValue && spec.PageSize.HasValue)
             {
                 query = query.Skip((spec.PageIndex.Value - 1) * spec.PageSize.Value).Take(spec.PageSize.Value);
             }
