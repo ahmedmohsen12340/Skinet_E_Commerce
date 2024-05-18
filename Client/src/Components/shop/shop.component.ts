@@ -18,7 +18,7 @@ import { PaginationHeaderComponent } from "../pagination-header/pagination-heade
   imports: [CommonModule, NgbPaginationModule, ProductCardComponent, PaginationHeaderComponent]
 })
 export class ShopComponent implements OnInit {
-  paginate!: IPaginate<IProduct>;
+  paginate: IPaginate<IProduct> = <IPaginate<IProduct>>{};
   products: IProduct[] = [];
   productParams = new ApiParams();
   brands: IBrand[] = [];

@@ -1,0 +1,11 @@
+<button class="btn btn-outline-secondary mx-3" (click)="getNotfound()">Get NotFound</button>
+<button class="btn btn-outline-secondary mx-3" (click)="getServerError()">Get server Error</button>
+<button class="btn btn-outline-secondary mx-3" (click)="getBadRequest()">Get badrequest</button>
+<button class="btn btn-outline-secondary mx-3" (click)="getvalidationError()">get validation error</button>
+<div class="my-5 text-danger">
+  <ul>
+    @for (error of validationErrors; track error) {
+      <li>{{error}}</li>
+    }
+  </ul>
+</div>

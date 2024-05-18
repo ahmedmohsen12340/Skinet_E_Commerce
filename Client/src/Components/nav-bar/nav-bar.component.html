@@ -9,13 +9,14 @@
       <div class="w-100 d-flex text-uppercase justify-content-end">
         <ul class="navbar-nav px-3">
           <li class="nav-item">
-            <a class="nav-link active" href="#">Home</a>
+            <a class="nav-link active" routerLink="" routerLinkActive="active"
+              [routerLinkActiveOptions]="{'exact':true}">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Shop</a>
+            <a class="nav-link" routerLink="shop" routerLinkActive="active">Shop</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Contact Us</a>
+            <a class="nav-link" routerLink="errors" routerLinkActive="active">Errors</a>
           </li>
         </ul>
         <div class="d-flex" role="search">

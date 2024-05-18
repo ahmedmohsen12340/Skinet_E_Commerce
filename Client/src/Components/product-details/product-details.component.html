@@ -1,0 +1,21 @@
+@if (product) {
+<div class="row">
+  <div class="col-6">
+    <img [src]="product.pictureUrl" alt="product image" class="img-fluid">
+  </div>
+  <div class="col-6 mt-5">
+    <h2>{{product.name}}</h2>
+    <p>{{product.price| currency}}</p>
+    <div class="d-flex align-items-center">
+      <i class="fa fa-minus-circle text-warning mx-2 fs-3" style="cursor: pointer;"></i>
+      <span class="fw-bold fs-4">2</span>
+      <i class="fa fa-plus-circle text-warning mx-2 fs-3" style="cursor: pointer;"></i>
+      <button class="btn btn-outline-secondary">Add To Cart</button>
+    </div>
+    <div>
+      <h4 class="my-3">Description</h4>
+      <p>{{product.description}}</p>
+    </div>
+  </div>
+</div>
+}
