@@ -1,1 +1,19 @@
-<p>home works!</p>
+<ngb-carousel #carousel (slide)="onSlide($event)" [interval]="1000" [pauseOnHover]="pauseOnHover"
+  [pauseOnFocus]="pauseOnFocus">
+  <ng-template ngbSlide>
+    <div class="picsum-img-wrapper">
+      <img class="w-100" src="assets/images/hero1.jpg" alt="first slide" />
+    </div>
+  </ng-template>
+  <ng-template ngbSlide>
+    <div class="picsum-img-wrapper">
+      <img class="w-100" src="assets/images/hero2.jpg" alt="second slide" />
+    </div>
+  </ng-template>
+  <ng-template ngbSlide>
+    <div class="picsum-img-wrapper">
+      <img class="w-100" src="assets/images/hero3.jpg" alt="third slide" />
+    </div>
+  </ng-template>
+</ngb-carousel>
+<h2 class="text-center my-5">Welcome To Skinet Store</h2>

@@ -1,5 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+:root{
+  --main-color: rgb(233, 84, 32);
+}
 
-.active{
-  color: orange !important;
+.active:not(.list-group-item){
+  color: var(--main-color) !important;
+}
+label.xng-breadcrumb-trail{
+  color: var(--main-color)
 }

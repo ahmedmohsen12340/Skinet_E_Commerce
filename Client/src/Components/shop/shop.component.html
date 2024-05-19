@@ -1,14 +1,14 @@
-<div class="row">
+<div class="row container m-auto" *ngIf="types.length>0&&brands.length>0">
   <!-- start filters section -->
 
-    <section class="col-3">
-      <h3>Sort</h3>
-      <select class="form-select" (change)="onSortSelect($event)">
+    <section class="col-3 mt-3">
+      <h3 style="color: var(--main-color);">Sort</h3>
+      <select class="form-select my-4" (change)="onSortSelect($event)">
         <option value="name">Alphabetical order</option>
         <option value="priceAsc">Price: from low to high</option>
         <option value="priceDesc">Price: from high to low</option>
       </select>
-      <h3>Brands</h3>
+      <h3 style="color: var(--main-color);">Brands</h3>
       <div class="my-3">
         <ul class="list-group">
           <li class="list-group-item" (click)="onBrandSelect(brand.id)"
@@ -19,7 +19,7 @@
           </li>
         </ul>
       </div>
-      <h3>Types</h3>
+      <h3 style="color: var(--main-color);">Types</h3>
       <div class="my-3">
         <ul class="list-group">
           <li class="list-group-item" (click)="onTypeSelect(type.id)"
@@ -36,7 +36,7 @@
 
 
     <!-- start products section  -->
-  <section class="col-9">
+  <section class="col-9 mt-3">
     <div class="d-flex justify-content-between">
       @if (countOFproducts)
       {

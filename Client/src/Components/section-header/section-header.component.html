@@ -1,0 +1,12 @@
+<ng-container *ngIf="bcService.breadcrumbs$|async as bcrumb">
+  <section *ngIf="bcrumb[bcrumb.length-1].label!=='home'" class="py-3" style="background-color: #eee;;">
+    <div class="d-flex mx-5 justify-content-between align-items-center">
+      <h1>{{bcrumb[bcrumb.length-1].label}}</h1>
+      <div>
+        <xng-breadcrumb>
+          <ng-container *xngBreadcrumbItem="let item">{{item|titlecase}}</ng-container>
+        </xng-breadcrumb>
+      </div>
+    </div>
+  </section>
+</ng-container>
