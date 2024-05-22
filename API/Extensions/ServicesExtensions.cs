@@ -2,10 +2,12 @@
 using Core;
 using Core.Interfaces;
 using InfraStructure;
+using InfraStructure.Data;
 using InfraStructure.Data.Repos;
 using InfraStucture.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 namespace API.Extensions
 {
@@ -23,6 +25,12 @@ namespace API.Extensions
             {
                 option.UseSqlite(configuration.GetConnectionString("Default"));
             });
+            services.AddSingleton<IConnectionMultiplexer>(c => 
+            {
+                var options = ConfigurationOptions.Parse(configuration.GetConnectionString("Redis"));
+                return ConnectionMultiplexer.Connect(options);
+            });
+            services.AddScoped<IBasketRepo,BasketRepo>();
             // services.AddScoped<IProductRepository, ProductRepository>();
             // services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
